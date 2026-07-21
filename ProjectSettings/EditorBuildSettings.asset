@@ -11,5 +11,17 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cabin 1.unity
     guid: 851327f4bf927bf4fb56314821a3edc5
+  - enabled: 1
+    path: Assets/Scenes/Cabin 2.unity
+    guid: 4164d0454cedc9d48abfbca4a752fe2d
+  - enabled: 1
+    path: Assets/Scenes/Cabin 3.unity
+    guid: fac8c491109f746489480d64f48d26b2
+  - enabled: 1
+    path: Assets/Scenes/Cabin 4.unity
+    guid: 58f935e64851b9c4b9758a0553a1c9d2
+  - enabled: 1
+    path: Assets/Scenes/Cabin 5.unity
+    guid: 4ff0a768fca2a274e9c741fba0eb5c34
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

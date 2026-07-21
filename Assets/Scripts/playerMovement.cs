@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float walkSpeed = 5f;
-    public float runSpeed = 10f;
+    public float walkSpeed = 7f;
+    public float runSpeed = 14f;
 
     private Rigidbody2D rb;
     private Animator anim;
