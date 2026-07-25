@@ -30,18 +30,18 @@ public class playerPersistence : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("Looking for Spawn ID: " + SpawnManager.NextSpawnID);
+       
 
         SpawnID[] spawns = FindObjectsOfType<SpawnID>();
 
         foreach (SpawnID spawn in spawns)
         {
-            Debug.Log("Found Spawn ID: " + spawn.SpawnID_);
+           
 
             if (spawn.SpawnID_ == SpawnManager.NextSpawnID)
             {
                 transform.position = spawn.transform.position;
-                Debug.Log("Teleported!");
+                
                 break;
             }
         }
