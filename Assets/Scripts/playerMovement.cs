@@ -12,6 +12,11 @@ public class PlayerMovement : MonoBehaviour
     private float MoveX;
     private float MoveY;
 
+    [SerializeField] private AudioClip footstepSound;
+    [SerializeField] private float footstepInterval = 0.4f;
+
+    private float footstepTimer;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -41,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetFloat("LastMoveX", MoveX);
             anim.SetFloat("LastMoveY", MoveY);
+
+            HandleFootsteps();
         }
     }
 
@@ -61,5 +68,24 @@ public class PlayerMovement : MonoBehaviour
     {
         MoveX = Input.GetAxisRaw("Horizontal");
         MoveY = Input.GetAxisRaw("Vertical");
+    }
+
+    private void HandleFootsteps()
+    {
+        bool isMoving = MoveX != 0 || MoveY != 0;
+
+        if (!isMoving)
+        {
+            footstepTimer = 0f;
+            return;
+        }
+
+        footstepTimer -= Time.deltaTime;
+
+        if (footstepTimer <= 0f)
+        {
+            AudioManager.instance.playSFX(footstepSound, 0.5f);
+            footstepTimer = footstepInterval;
+        }
     }
 }
