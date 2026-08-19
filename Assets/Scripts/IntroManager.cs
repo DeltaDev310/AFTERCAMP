@@ -1,11 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class IntroManager : MonoBehaviour
 {
     public GameObject Panel1;
     public GameObject Panel2;
+
+    public CanvasGroup Panel1Group;
+    public CanvasGroup Panel2Group;
 
     public TMP_Text DialogueText;
 
@@ -24,7 +28,12 @@ public class IntroManager : MonoBehaviour
         Panel1.SetActive(true);
         Panel2.SetActive(false);
 
+        Panel1Group.alpha = 0f;
+        Panel2Group.alpha = 0f;
+
         DialogueText.text = Lines[CurrentLine];
+
+        StartCoroutine(FadeIn(Panel1Group));
     }
     private void Update()
     {
@@ -45,14 +54,46 @@ public class IntroManager : MonoBehaviour
         }
         if (CurrentLine == 2)
         {
-            Panel1.SetActive(false);
-            Panel2.SetActive(true);
+            StartCoroutine(switchPanels());
         }
         DialogueText.text = Lines[CurrentLine];
     }
+    private IEnumerator switchPanels()
+    {
+        yield return StartCoroutine(FadeOut(Panel1Group));
+        Panel1.SetActive(false);
+        Panel2.SetActive(true);
+        yield return StartCoroutine(FadeIn(Panel2Group));
+    }
+
+    private IEnumerator FadeIn(CanvasGroup group)
+    {
+        float time = 0f;
+
+        while (time < 1f)
+        {
+            time += Time.deltaTime;
+            group.alpha = Mathf.Lerp(0f, 1f, time);
+            yield return null;
+        }
+        group.alpha = 1f;
+    }
+
+    private IEnumerator FadeOut(CanvasGroup group)
+    {
+        float time = 0f;
+
+        while (time < 1f)
+        {
+            time += Time.deltaTime;
+            group.alpha = Mathf.Lerp(1f, 0f, time);
+            yield return null;
+        }
+        group.alpha = 0f;
+    }
     void EndIntro()
     {
-        Debug.Log("Intro finished. Proceeding to the next scene...");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
     }
 
 }

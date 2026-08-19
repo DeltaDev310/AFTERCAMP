@@ -448,6 +448,7 @@ GameObject:
   - component: {fileID: 499569968}
   - component: {fileID: 499569970}
   - component: {fileID: 499569969}
+  - component: {fileID: 499569971}
   m_Layer: 5
   m_Name: Moon
   m_TagString: Untagged
@@ -512,6 +513,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 499569967}
   m_CullTransparentMesh: 1
+--- !u!225 &499569971
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499569967}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1016641622
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,6 +556,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   Panel1: {fileID: 499569967}
   Panel2: {fileID: 1692765165}
+  Panel1Group: {fileID: 499569971}
+  Panel2Group: {fileID: 1692765169}
   DialogueText: {fileID: 1272359366}
 --- !u!4 &1016641624
 Transform:
@@ -597,7 +612,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4e08bf5c197513347ba2d83528f87a6c, type: 2}
   m_sharedMaterial: {fileID: -6828898061360678346, guid: 4e08bf5c197513347ba2d83528f87a6c, type: 2}
@@ -786,6 +801,7 @@ GameObject:
   - component: {fileID: 1692765166}
   - component: {fileID: 1692765168}
   - component: {fileID: 1692765167}
+  - component: {fileID: 1692765169}
   m_Layer: 5
   m_Name: the girl
   m_TagString: Untagged
@@ -832,7 +848,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8017401370040693400, guid: 9c4e44a8032bd2c4a82bef39666672be, type: 3}
+  m_Sprite: {fileID: 5581372884850608034, guid: 6ef756445c0ea1e468b6cf36c7ceac81, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -850,6 +866,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692765165}
   m_CullTransparentMesh: 1
+--- !u!225 &1692765169
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692765165}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1790184581
 GameObject:
   m_ObjectHideFlags: 0
