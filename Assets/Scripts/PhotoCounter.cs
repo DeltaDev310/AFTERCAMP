@@ -11,13 +11,14 @@ public class PhotoCounter : MonoBehaviour
         NumberOfPhotosCollected.text = NumberOfPhotosCollectedInt + " / 5";
         NumberOfPhotosCollected.gameObject.SetActive(false);
     }
+
     public void AddPhoto()
     {
-
         if (NumberOfPhotosCollectedInt < 1)
         {
             NumberOfPhotosCollected.gameObject.SetActive(true);
         }
+
         NumberOfPhotosCollectedInt++;
         NumberOfPhotosCollected.text = NumberOfPhotosCollectedInt + " / 5";
     }

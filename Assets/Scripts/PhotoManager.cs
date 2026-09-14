@@ -1,33 +1,42 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using System.Collections;
-using TMPro;
 
 public class PhotoManager : MonoBehaviour
 {
     public FullCodeManager fullCodeManager;
-
-    public int PhotoNumber = 0;
-    int PhotoCodeDigit;
-
     public PhotoCounter photoCounter;
+
+    public int PhotoNumber;
+
+    private void Start()
+    {
+        // If this photo was already collected, remove it immediately.
+        if (PhotoProgress.Instance.HasCollected(PhotoNumber))
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
             CollectPhoto();
-            photoCounter.AddPhoto();
         }
     }
-    void CollectPhoto()
+
+    private void CollectPhoto()
     {
-        PhotoCodeDigit = Random.Range(0, 10);
-        fullCodeManager.AddDigit(PhotoCodeDigit);
+        // Remember that THIS specific photo was collected.
+        PhotoProgress.Instance.MarkCollected(PhotoNumber);
 
+        // Generate and store the random digit.
+        int photoCodeDigit = Random.Range(0, 10);
+        fullCodeManager.AddDigit(photoCodeDigit);
 
+        // Update the counter.
+        photoCounter.AddPhoto();
+
+        // Remove the photo.
         Destroy(gameObject);
     }
-
-    
 }
