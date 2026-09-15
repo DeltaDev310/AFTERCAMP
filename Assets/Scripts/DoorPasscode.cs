@@ -1,21 +1,30 @@
 using TMPro;
+using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DoorPasscode : MonoBehaviour
 {
-    [SerializeField] private string Passcode;
+    public string Passcode;
     public FullCodeManager FullCodeManager;
 
     public TMP_InputField PasscodeInputField;
+    public Transform Player;
+    public Transform EntraceDoor;
+    public Transform Canvas;
 
     void Start()
     {
-        Passcode = FullCodeManager.fullcode.ToString();
+        
 
         PasscodeInputField.gameObject.SetActive(false);
 
         PasscodeInputField.onSubmit.AddListener(CheckPassCode);
 
+    }
+    void Update()
+    {
+        Passcode = string.Join("", FullCodeManager.fullcode);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -30,9 +39,15 @@ public class DoorPasscode : MonoBehaviour
     }
     void CheckPassCode(string input)
     {
-        if (input == Passcode)
+        if (input == Passcode && Passcode != null && Passcode.Length == 5)
         {
             Debug.Log("Correct Passcode!");
+            SceneManager.LoadScene("End");
+
+            Player.gameObject.SetActive(false);
+            EntraceDoor.gameObject.SetActive(false);
+            PasscodeInputField.gameObject.SetActive(false);
+            Canvas.gameObject.SetActive(false);
         }
         else
         {
@@ -41,4 +56,5 @@ public class DoorPasscode : MonoBehaviour
             PasscodeInputField.gameObject.SetActive(false);
         }
     }
+   
 }
