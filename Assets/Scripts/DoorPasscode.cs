@@ -9,30 +9,31 @@ public class DoorPasscode : MonoBehaviour
     public FullCodeManager FullCodeManager;
 
     public TMP_InputField PasscodeInputField;
+
     public Transform Player;
     public Transform EntraceDoor;
     public Transform Canvas;
+
     public GameObject ErrorMessageText;
     public GameObject EnterCodeMessage;
 
+    public bool PlayerAtDoor;
+
     void Start()
     {
-
-
         PasscodeInputField.gameObject.SetActive(false);
 
-        PasscodeInputField.onSubmit.AddListener(CheckPassCode);
+        ErrorMessageText.SetActive(false);
+        EnterCodeMessage.SetActive(false);
 
+        PasscodeInputField.onSubmit.AddListener(CheckPassCode);
     }
+
     void Update()
     {
         Passcode = string.Join("", FullCodeManager.fullcode);
-    }
 
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-
-        if (collision.gameObject.CompareTag("Player") && Input.GetKeyDown(KeyCode.E))
+        if (PlayerAtDoor && Input.GetKeyDown(KeyCode.E))
         {
             PasscodeInputField.gameObject.SetActive(true);
 
@@ -42,39 +43,54 @@ public class DoorPasscode : MonoBehaviour
             EnterCodeMessage.SetActive(false);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerAtDoor = true;
+            EnterCodeMessage.SetActive(true);
+        }
+    }
+
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            PlayerAtDoor = false;
             EnterCodeMessage.SetActive(false);
         }
     }
+
     void CheckPassCode(string input)
     {
         if (input == Passcode && Passcode != null && Passcode.Length == 5)
         {
             Debug.Log("Correct Passcode!");
-            SceneManager.LoadScene("End");
 
             Player.gameObject.SetActive(false);
             EntraceDoor.gameObject.SetActive(false);
             PasscodeInputField.gameObject.SetActive(false);
             Canvas.gameObject.SetActive(false);
+
+            SceneManager.LoadScene("End");
         }
         else
         {
-            Debug.Log("Incorrect Passcode! try again");
+            Debug.Log("Incorrect Passcode! Try again");
 
             PasscodeInputField.gameObject.SetActive(false);
+
             StartCoroutine(ErrorMessage());
         }
     }
+
     private IEnumerator ErrorMessage()
     {
         ErrorMessageText.SetActive(true);
+
         yield return new WaitForSeconds(2f);
+
         ErrorMessageText.SetActive(false);
     }
 }
-
-
