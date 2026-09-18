@@ -1,19 +1,22 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyAI : MonoBehaviour
 {
     // Reference to the player object
 
     public Transform player;
+    public Transform Unraveler;
+    public Transform Jumpscare;
+    public Transform JumpScareSound;
 
     public float patrolSpeed = 8f;
     public float chaseSpeed = 8f;
 
     public float detectionRange = 20f;
     public float loseRange = 18f;
-
-    
 
     private enum State // Define the states for the enemy AI
     {
@@ -106,7 +109,29 @@ public class EnemyAI : MonoBehaviour
             currentState = State.Chase;
         }
     }
-    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(JumpscareSequence());
+        }
+    }
+
+    private IEnumerator JumpscareSequence()
+    {
+        Jumpscare.gameObject.SetActive(true);
+        JumpScareSound.gameObject.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        Jumpscare.gameObject.SetActive(false);
+        JumpScareSound.gameObject.SetActive(false);
+        player.gameObject.SetActive(false);
+        Unraveler.gameObject.SetActive(false);
+        SceneManager.LoadScene("Intro");
+        player.gameObject.SetActive(true);
+        yield return new WaitForSeconds(15f);
+        Unraveler.gameObject.SetActive(true);
+    }
+
     void ChangeState(State newState)
     {
         currentState = newState;

@@ -13,6 +13,7 @@ public class DoorPasscode : MonoBehaviour
     public Transform Player;
     public Transform EntraceDoor;
     public Transform Canvas;
+    public Transform TheUnraveler;
 
     public GameObject ErrorMessageText;
     public GameObject EnterCodeMessage;
@@ -72,6 +73,7 @@ public class DoorPasscode : MonoBehaviour
             EntraceDoor.gameObject.SetActive(false);
             PasscodeInputField.gameObject.SetActive(false);
             Canvas.gameObject.SetActive(false);
+            TheUnraveler.gameObject.SetActive(false);
 
             SceneManager.LoadScene("End");
         }
