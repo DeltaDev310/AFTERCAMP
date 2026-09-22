@@ -90,5 +90,5 @@ Indie game developer learning game programming, currently focused on Unity and C
 
 AFTERCAMP is an independent project created for learning, experimentation, and eventually release.
 
-**More coming soon.**
+**More coming soon maybe november or before.**
 
