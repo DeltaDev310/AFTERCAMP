@@ -1,16 +1,12 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EnemyAI : MonoBehaviour
 {
-    // Reference to the player object
-
     public Transform player;
-    public Transform Unraveler;
     public Transform Jumpscare;
-    public Transform JumpScareSound;
+    public AudioSource JumpScareSound;
 
     public float patrolSpeed = 8f;
     public float chaseSpeed = 8f;
@@ -18,28 +14,37 @@ public class EnemyAI : MonoBehaviour
     public float detectionRange = 20f;
     public float loseRange = 18f;
 
-    private enum State // Define the states for the enemy AI
+    private enum State
     {
         Patrol,
         Chase,
         Return
     }
 
-    private State currentState = State.Patrol; // Start in the Patrol state
+    private State currentState = State.Patrol;
 
     public Transform[] patrolPoints;
     private int currentPatrolPoint = 0;
-    private Vector3 startPosition; // Store the starting position of the enemy
+    private Vector3 startPosition;
+
+    private bool dying = false;
 
     void Start()
     {
-        startPosition = transform.position; // Store the starting position of the enemy
+        startPosition = transform.position;
     }
 
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        switch (currentState)// Handle the current state of the enemy AI
+        if (dying)
+            return;
+
+        float distanceToPlayer = Vector3.Distance(
+            transform.position,
+            player.position
+        );
+
+        switch (currentState)
         {
             case State.Patrol:
                 Patrol(distanceToPlayer);
@@ -53,9 +58,9 @@ public class EnemyAI : MonoBehaviour
                 Return(distanceToPlayer);
                 break;
         }
-
     }
-    void Patrol(float distanceToPlayer)//  Move between patrol points
+
+    void Patrol(float distanceToPlayer)
     {
         transform.position = Vector3.MoveTowards(
             transform.position,
@@ -65,54 +70,59 @@ public class EnemyAI : MonoBehaviour
 
         if (Vector3.Distance(
             transform.position,
-            patrolPoints[currentPatrolPoint].position) < 0.1f)
+            patrolPoints[currentPatrolPoint].position
+        ) < 0.1f)
         {
             currentPatrolPoint++;
 
             if (currentPatrolPoint >= patrolPoints.Length)
-            {
                 currentPatrolPoint = 0;
-            }
         }
 
         if (distanceToPlayer <= detectionRange)
-        {
             ChangeState(State.Chase);
-        }
     }
 
-    void Chase(float distanceToPlayer)// Move towards the player
+    void Chase(float distanceToPlayer)
     {
         transform.position = Vector3.MoveTowards(
             transform.position,
             player.position,
             chaseSpeed * Time.deltaTime
         );
+
         if (distanceToPlayer > loseRange)
-        {
-            currentState = State.Return;
-        }
+            ChangeState(State.Return);
     }
-    void Return(float distanceToPlayer)// Move back to the starting position
+
+    void Return(float distanceToPlayer)
     {
         transform.position = Vector3.MoveTowards(
             transform.position,
             startPosition,
             patrolSpeed * Time.deltaTime
         );
-        if (Vector3.Distance(transform.position, startPosition) < 0.1f)
+
+        if (Vector3.Distance(
+            transform.position,
+            startPosition
+        ) < 0.1f)
         {
-            currentState = State.Patrol;
+            ChangeState(State.Patrol);
         }
+
         if (distanceToPlayer <= detectionRange)
-        {
-            currentState = State.Chase;
-        }
+            ChangeState(State.Chase);
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (dying)
+            return;
+
         if (collision.gameObject.CompareTag("Player"))
         {
+            dying = true;
             StartCoroutine(JumpscareSequence());
         }
     }
@@ -120,16 +130,40 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator JumpscareSequence()
     {
         Jumpscare.gameObject.SetActive(true);
-        JumpScareSound.gameObject.SetActive(true);
+
+        JumpScareSound.Play();
+
         yield return new WaitForSeconds(2f);
+
+        JumpScareSound.Stop();
         Jumpscare.gameObject.SetActive(false);
-        JumpScareSound.gameObject.SetActive(false);
-        player.gameObject.SetActive(false);
-        Unraveler.gameObject.SetActive(false);
+
+        ResetGame();
+
         SceneManager.LoadScene("Intro");
-        player.gameObject.SetActive(true);
-        yield return new WaitForSeconds(15f);
-        Unraveler.gameObject.SetActive(true);
+    }
+
+    private void ResetGame()
+    {
+        // Reset the code
+        if (FullCodeManager.Instance != null)
+        {
+            FullCodeManager.Instance.fullcode.Clear();
+            Destroy(FullCodeManager.Instance.gameObject);
+        }
+
+        // Reset collected photos
+        if (PhotoProgress.Instance != null)
+        {
+            PhotoProgress.Instance.collectedPhotos.Clear();
+            Destroy(PhotoProgress.Instance.gameObject);
+        }
+
+        // Reset persistent player
+        if (player != null)
+        {
+            Destroy(player.gameObject);
+        }
     }
 
     void ChangeState(State newState)

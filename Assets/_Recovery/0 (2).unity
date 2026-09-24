@@ -1332,8 +1332,7 @@ Transform:
   m_LocalPosition: {x: 207.9, y: 31.25, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1957510550}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &44008221
@@ -13056,7 +13055,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   player: {fileID: 1082689323}
   Jumpscare: {fileID: 129545308}
-  JumpScareSound: {fileID: 89343367}
+  JumpScareSound: {fileID: 89343366}
   patrolSpeed: 8
   chaseSpeed: 8
   detectionRange: 20
@@ -65581,12 +65580,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957510548}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.61749953, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 195.55, y: 31.25, z: 0}
+  m_LocalScale: {x: 20, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 39618552}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1961653831
 GameObject:
@@ -591868,6 +591867,7 @@ SceneRoots:
   - {fileID: 424220110}
   - {fileID: 664413149}
   - {fileID: 1121758340}
+  - {fileID: 1957510550}
   - {fileID: 39618552}
   - {fileID: 1004162562}
   - {fileID: 1899868841}
