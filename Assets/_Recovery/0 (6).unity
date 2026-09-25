@@ -8956,7 +8956,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 424661882}
   - {fileID: 1088290663}
   - {fileID: 1130603065}
   - {fileID: 1265259830}
@@ -8994,7 +8993,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bdb2d015006a954e93a87008c881567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  TheUnraveler: {fileID: 0}
 --- !u!1 &284696787
 GameObject:
   m_ObjectHideFlags: 0
@@ -13074,7 +13072,6 @@ MonoBehaviour:
   loseRange: 18
   Jumpscare: {fileID: 1388613598}
   JumpScareSound: {fileID: 89343367}
-  TheUnraveler: {fileID: 424661879}
 --- !u!212 &424661881
 SpriteRenderer:
   serializedVersion: 3
@@ -13144,11 +13141,11 @@ Transform:
   m_GameObject: {fileID: 424661879}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.814779, y: 2.115406, z: 0}
+  m_LocalPosition: {x: -11.924779, y: 23.725407, z: 0}
   m_LocalScale: {x: 38.748375, y: 41.11036, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 281600699}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &424661883
 CapsuleCollider2D:
@@ -591939,6 +591936,7 @@ SceneRoots:
   - {fileID: 2099875998}
   - {fileID: 1617184172}
   - {fileID: 1919572767}
+  - {fileID: 424661882}
   - {fileID: 281600699}
   - {fileID: 1795100012}
   - {fileID: 533056837}

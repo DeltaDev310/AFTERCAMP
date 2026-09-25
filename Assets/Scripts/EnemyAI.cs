@@ -4,15 +4,23 @@ using UnityEngine.SceneManagement;
 
 public class EnemyAI : MonoBehaviour
 {
-    public Transform player;
+    public Transform[] patrolPoints;
+
+    public float patrolSpeed = 3f;
+    public float chaseSpeed = 5f;
+
+    public float detectionRange = 20f;
+    public float loseRange = 25f;
+
     public Transform Jumpscare;
     public AudioSource JumpScareSound;
 
-    public float patrolSpeed = 8f;
-    public float chaseSpeed = 8f;
+    private Transform player;
+    public GameObject TheUnraveler;
 
-    public float detectionRange = 20f;
-    public float loseRange = 18f;
+    private int currentPatrolPoint = 0;
+
+    private bool dying = false;
 
     private enum State
     {
@@ -23,23 +31,52 @@ public class EnemyAI : MonoBehaviour
 
     private State currentState = State.Patrol;
 
-    public Transform[] patrolPoints;
-    private int currentPatrolPoint = 0;
-    private Vector3 startPosition;
 
-    private bool dying = false;
-
-    void Start()
+    private void Start()
     {
-        startPosition = transform.position;
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
+        }
+        else
+        {
+            Debug.LogError("EnemyAI: Player not found!");
+            return;
+        }
+
+        if (patrolPoints == null || patrolPoints.Length == 0)
+        {
+            Debug.LogError("EnemyAI: No patrol points assigned!");
+            return;
+        }
+
+        currentPatrolPoint = Random.Range(0, patrolPoints.Length);
+
+        Debug.Log(
+            "UNRAVELER STARTED | " +
+            "PLAYER: " + player.name +
+            " | PATROL POINTS: " + patrolPoints.Length +
+            " | STARTING POINT: " + currentPatrolPoint
+        );
     }
 
-    void Update()
+
+    private void Update()
     {
+        Debug.Log("AI UPDATE");
+
         if (dying)
             return;
 
-        float distanceToPlayer = Vector3.Distance(
+        if (player == null)
+            return;
+
+        if (patrolPoints == null || patrolPoints.Length == 0)
+            return;
+
+        float distanceToPlayer = Vector2.Distance(
             transform.position,
             player.position
         );
@@ -58,19 +95,73 @@ public class EnemyAI : MonoBehaviour
                 Return(distanceToPlayer);
                 break;
         }
+
+       
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    void Patrol(float distanceToPlayer)
+    private void OnDisable()
     {
-        transform.position = Vector3.MoveTowards(
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "MainGame")
+        {
+            TheUnraveler.SetActive(false);
+        }
+        if (scene.name == "MainGame")
+        {
+            TheUnraveler.SetActive(true);
+        }
+    }
+
+    private void Patrol(float distanceToPlayer)
+    {
+        if (currentPatrolPoint < 0 || currentPatrolPoint >= patrolPoints.Length)
+        {
+            Debug.LogError("INVALID PATROL INDEX: " + currentPatrolPoint);
+            return;
+        }
+
+        Transform target = patrolPoints[currentPatrolPoint];
+
+        if (target == null)
+        {
+            Debug.LogError(
+                "PATROL POINT " + currentPatrolPoint + " IS NULL/DESTROYED"
+            );
+
+            currentPatrolPoint++;
+
+            if (currentPatrolPoint >= patrolPoints.Length)
+                currentPatrolPoint = 0;
+
+            return;
+        }
+
+        Debug.Log(
+            "AI MOVING | Current: " +
+            currentPatrolPoint +
+            " | Target: " +
+            target.name +
+            " | Distance: " +
+            Vector2.Distance(transform.position, target.position)
+        );
+
+        transform.position = Vector2.MoveTowards(
             transform.position,
-            patrolPoints[currentPatrolPoint].position,
+            target.position,
             patrolSpeed * Time.deltaTime
         );
 
-        if (Vector3.Distance(
+        if (Vector2.Distance(
             transform.position,
-            patrolPoints[currentPatrolPoint].position
+            target.position
         ) < 0.1f)
         {
             currentPatrolPoint++;
@@ -80,40 +171,54 @@ public class EnemyAI : MonoBehaviour
         }
 
         if (distanceToPlayer <= detectionRange)
+        {
             ChangeState(State.Chase);
+        }
     }
 
-    void Chase(float distanceToPlayer)
+
+    private void Chase(float distanceToPlayer)
     {
-        transform.position = Vector3.MoveTowards(
+        transform.position = Vector2.MoveTowards(
             transform.position,
             player.position,
             chaseSpeed * Time.deltaTime
         );
 
+        // Player escaped
         if (distanceToPlayer > loseRange)
+        {
             ChangeState(State.Return);
+        }
     }
 
-    void Return(float distanceToPlayer)
+
+    private void Return(float distanceToPlayer)
     {
-        transform.position = Vector3.MoveTowards(
+        Transform target = patrolPoints[currentPatrolPoint];
+
+        transform.position = Vector2.MoveTowards(
             transform.position,
-            startPosition,
+            target.position,
             patrolSpeed * Time.deltaTime
         );
 
-        if (Vector3.Distance(
+        // Reached patrol route
+        if (Vector2.Distance(
             transform.position,
-            startPosition
+            target.position
         ) < 0.1f)
         {
             ChangeState(State.Patrol);
         }
 
+        // Player came back
         if (distanceToPlayer <= detectionRange)
+        {
             ChangeState(State.Chase);
+        }
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -123,50 +228,22 @@ public class EnemyAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             dying = true;
-            StartCoroutine(JumpscareSequence());
+
+            if (JumpscareController.Instance != null)
+            {
+                JumpscareController.Instance.PlayJumpscare();
+            }
+            else
+            {
+                Debug.LogError(
+                    "EnemyAI: JumpscareController not found!"
+                );
+            }
         }
     }
 
-    private IEnumerator JumpscareSequence()
-    {
-        Jumpscare.gameObject.SetActive(true);
 
-        JumpScareSound.Play();
-
-        yield return new WaitForSeconds(2f);
-
-        JumpScareSound.Stop();
-        Jumpscare.gameObject.SetActive(false);
-
-        ResetGame();
-
-        SceneManager.LoadScene("Intro");
-    }
-
-    private void ResetGame()
-    {
-        // Reset the code
-        if (FullCodeManager.Instance != null)
-        {
-            FullCodeManager.Instance.fullcode.Clear();
-            Destroy(FullCodeManager.Instance.gameObject);
-        }
-
-        // Reset collected photos
-        if (PhotoProgress.Instance != null)
-        {
-            PhotoProgress.Instance.collectedPhotos.Clear();
-            Destroy(PhotoProgress.Instance.gameObject);
-        }
-
-        // Reset persistent player
-        if (player != null)
-        {
-            Destroy(player.gameObject);
-        }
-    }
-
-    void ChangeState(State newState)
+    private void ChangeState(State newState)
     {
         currentState = newState;
     }

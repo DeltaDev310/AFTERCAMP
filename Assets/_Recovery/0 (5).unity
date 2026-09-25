@@ -8979,7 +8979,6 @@ Transform:
   - {fileID: 2026310896}
   - {fileID: 1387991344}
   - {fileID: 760345479}
-  - {fileID: 1388613598}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &281600700
@@ -8994,7 +8993,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bdb2d015006a954e93a87008c881567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  TheUnraveler: {fileID: 0}
 --- !u!1 &284696787
 GameObject:
   m_ObjectHideFlags: 0
@@ -13056,6 +13054,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72918d4ee398c18469a55c51c8f886fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
+  player: {fileID: 1082689323}
+  Jumpscare: {fileID: 129545308}
+  JumpScareSound: {fileID: 89343367}
+  patrolSpeed: 8
+  chaseSpeed: 8
+  detectionRange: 20
+  loseRange: 18
   patrolPoints:
   - {fileID: 2067995017}
   - {fileID: 1825947822}
@@ -13068,13 +13073,6 @@ MonoBehaviour:
   - {fileID: 2026310896}
   - {fileID: 1387991344}
   - {fileID: 760345479}
-  patrolSpeed: 8
-  chaseSpeed: 8
-  detectionRange: 20
-  loseRange: 18
-  Jumpscare: {fileID: 1388613598}
-  JumpScareSound: {fileID: 89343367}
-  TheUnraveler: {fileID: 424661879}
 --- !u!212 &424661881
 SpriteRenderer:
   serializedVersion: 3
@@ -46217,52 +46215,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 281600699}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1388613597
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1388613598}
-  - component: {fileID: 1388613599}
-  m_Layer: 0
-  m_Name: JumpScarecontroller
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1388613598
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1388613597}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 281600699}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1388613599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1388613597}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 225918e4996f0dc40b9d6e730363dbc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JumpscareController
-  jumpscareImage: {fileID: 129545307}
-  jumpscareAudio: {fileID: 89343367}
 --- !u!1 &1392335785
 GameObject:
   m_ObjectHideFlags: 0
