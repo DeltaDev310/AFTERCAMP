@@ -5,8 +5,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public GameObject TheUnraveler;
-
     private void Awake()
     {
         if (Instance == null)
@@ -42,16 +40,23 @@ public class GameManager : MonoBehaviour
 
     private void UpdateUnravelerState(Scene scene)
     {
-        if (TheUnraveler == null)
-            return;
+        if (scene.name == "MainGame")
+        {
+            GameObject unraveler = GameObject.Find("TheUnraveler");
 
-        bool inMainGame = scene.name == "MainGame";
-
-        Debug.Log(
-            "SCENE: " + scene.name +
-            " | UNRAVELER: " + inMainGame
-        );
-
-        TheUnraveler.SetActive(inMainGame);
+            if (unraveler != null)
+            {
+                unraveler.SetActive(true);
+                Debug.Log("The Unraveler is ACTIVE.");
+            }
+            else
+            {
+                Debug.LogError("The Unraveler was NOT found in MainGame!");
+            }
+        }
+        else
+        {
+            Debug.Log("The Unraveler is OFF in " + scene.name);
+        }
     }
 }
