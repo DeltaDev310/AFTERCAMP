@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private AudioClip footstepSound;
     [SerializeField] private float footstepInterval = 0.4f;
+    [SerializeField] private GameObject Player;
 
     private float footstepTimer;
 
@@ -22,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+
+        Player.SetActive(true); // Ensure the player is active at the start of the game
     }
 
     private void Update()

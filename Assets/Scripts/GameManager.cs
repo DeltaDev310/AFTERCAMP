@@ -5,6 +5,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [Header("Persistent Objects")]
+    public GameObject Player;
+    public GameObject TheUnraveler;
+
+    [Header("Main Game Spawn")]
+    public Vector2 mainGameSpawn = new Vector2(-51.3162f, 4.34f);
+
+    [Header("Unraveler Spawn")]
+    public Vector2 unravelerSpawn = new Vector2(-0.75f, 1.375f);
+
     private void Awake()
     {
         if (Instance == null)
@@ -30,33 +40,77 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateUnravelerState(SceneManager.GetActiveScene());
+        UpdateSceneState(SceneManager.GetActiveScene());
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        UpdateUnravelerState(scene);
+        UpdateSceneState(scene);
     }
 
-    private void UpdateUnravelerState(Scene scene)
+    private void UpdateSceneState(Scene scene)
     {
+        Debug.Log("LOADED SCENE: " + scene.name);
+
+        // =========================
+        // MAIN GAME
+        // =========================
+
         if (scene.name == "MainGame")
         {
-            GameObject unraveler = GameObject.Find("TheUnraveler");
+            // Activate player
+            if (Player != null)
+            {
+                Player.SetActive(true);
 
-            if (unraveler != null)
-            {
-                unraveler.SetActive(true);
-                Debug.Log("The Unraveler is ACTIVE.");
+                Player.transform.position = mainGameSpawn;
+
+                Debug.Log(
+                    "PLAYER RESET TO: " +
+                    mainGameSpawn
+                );
             }
-            else
+
+            // Activate Unraveler
+            if (TheUnraveler != null)
             {
-                Debug.LogError("The Unraveler was NOT found in MainGame!");
+                TheUnraveler.SetActive(true);
+
+                // Reset Unraveler position
+                TheUnraveler.transform.position = unravelerSpawn;
+
+                EnemyAI enemyAI =
+                    TheUnraveler.GetComponent<EnemyAI>();
+
+                if (enemyAI != null)
+                {
+                    enemyAI.ResetAI();
+                }
+
+                Debug.Log(
+                    "UNRAVELER RESET TO: " +
+                    unravelerSpawn
+                );
+
+                Debug.Log("UNRAVELER ACTIVATED");
             }
+
         }
+        // =========================
+         // OTHER SCENES
+         // =========================
+
         else
         {
-            Debug.Log("The Unraveler is OFF in " + scene.name);
+            if (TheUnraveler != null)
+            {
+                TheUnraveler.SetActive(false);
+
+                Debug.Log(
+                    "UNRAVELER DISABLED - SCENE: " +
+                    scene.name
+                );
+            }
         }
     }
 }

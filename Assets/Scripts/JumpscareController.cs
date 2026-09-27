@@ -4,22 +4,23 @@ using UnityEngine.SceneManagement;
 
 public class JumpscareController : MonoBehaviour
 {
-    [SerializeField] private GameObject jumpscareBackground;
-    [SerializeField] private GameObject jumpscareImage;
-    [SerializeField] private AudioSource jumpscareAudio;
+    public static JumpscareController Instance;
 
-    public GameObject Canvas;
-    public GameObject Player;
-    public GameObject Unraveler;
-
-    public JumpscareController jumpscareController;
+    [Header("Jumpscare")]
+    public GameObject jumpscareImage;
+    public AudioSource jumpscareAudio;
 
     private bool playing = false;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
-        jumpscareBackground.SetActive(false);
-        jumpscareImage.SetActive(false);
+        if (jumpscareImage != null)
+            jumpscareImage.SetActive(false);
     }
 
     public void PlayJumpscare()
@@ -34,17 +35,46 @@ public class JumpscareController : MonoBehaviour
     {
         playing = true;
 
-        jumpscareBackground.SetActive(true);
-        jumpscareImage.SetActive(true);
+        Debug.Log("JUMPSCARE STARTED");
 
-        jumpscareAudio.Play();
+        // Show image
+        if (jumpscareImage != null)
+            jumpscareImage.SetActive(true);
+
+        // Play sound
+        if (jumpscareAudio != null)
+            jumpscareAudio.Play();
 
         yield return new WaitForSeconds(2f);
 
-        SceneManager.LoadScene("Menu");
+        // Stop sound
+        if (jumpscareAudio != null)
+            jumpscareAudio.Stop();
 
-        Canvas.SetActive(false);
-        Player.SetActive(false);
-        Unraveler.SetActive(false);
+        // Hide image
+        if (jumpscareImage != null)
+            jumpscareImage.SetActive(false);
+
+        ResetGame();
+
+        // Go back to intro
+        SceneManager.LoadScene("Intro");
+    }
+
+    private void ResetGame()
+    {
+        // Reset code
+        if (FullCodeManager.Instance != null)
+        {
+            FullCodeManager.Instance.fullcode.Clear();
+        }
+
+        // Reset photos
+        if (PhotoProgress.Instance != null)
+        {
+            PhotoProgress.Instance.collectedPhotos.Clear();
+        }
+
+        Debug.Log("GAME RESET");
     }
 }
