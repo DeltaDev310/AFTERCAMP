@@ -13,14 +13,17 @@ public class GameManager : MonoBehaviour
     public Vector2 mainGameSpawn = new Vector2(-51.3162f, 4.34f);
 
     [Header("Unraveler Spawn")]
-    public Vector2 unravelerSpawn = new Vector2(-0.75f, 1.375f);
+    public Vector2 unravelerSpawn = new Vector2(154f, 31f);
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+
             DontDestroyOnLoad(gameObject);
+
+            Debug.Log("GAMEMANAGER INITIALIZED");
         }
         else
         {
@@ -50,7 +53,9 @@ public class GameManager : MonoBehaviour
 
     private void UpdateSceneState(Scene scene)
     {
+        Debug.Log("================================");
         Debug.Log("LOADED SCENE: " + scene.name);
+        Debug.Log("================================");
 
         // =========================
         // MAIN GAME
@@ -58,7 +63,10 @@ public class GameManager : MonoBehaviour
 
         if (scene.name == "MainGame")
         {
-            // Activate player
+            // -------------------------
+            // PLAYER
+            // -------------------------
+
             if (Player != null)
             {
                 Player.SetActive(true);
@@ -67,17 +75,36 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log(
                     "PLAYER RESET TO: " +
-                    mainGameSpawn
+                    Player.transform.position
+                );
+            }
+            else
+            {
+                Debug.LogError(
+                    "GAME MANAGER: PLAYER REFERENCE IS NULL!"
                 );
             }
 
-            // Activate Unraveler
+            // -------------------------
+            // UNRAVELER
+            // -------------------------
+
             if (TheUnraveler != null)
             {
                 TheUnraveler.SetActive(true);
 
-                // Reset Unraveler position
-                TheUnraveler.transform.position = unravelerSpawn;
+                TheUnraveler.transform.position =
+                    unravelerSpawn;
+
+                Debug.Log(
+                    "UNRAVELER FORCED TO: " +
+                    unravelerSpawn
+                );
+
+                Debug.Log(
+                    "UNRAVELER ACTUAL POSITION: " +
+                    TheUnraveler.transform.position
+                );
 
                 EnemyAI enemyAI =
                     TheUnraveler.GetComponent<EnemyAI>();
@@ -85,20 +112,40 @@ public class GameManager : MonoBehaviour
                 if (enemyAI != null)
                 {
                     enemyAI.ResetAI();
+
+                    Debug.Log(
+                        "UNRAVELER AI RESET"
+                    );
+                }
+                else
+                {
+                    Debug.LogError(
+                        "GAME MANAGER: " +
+                        "EnemyAI COMPONENT NOT FOUND!"
+                    );
                 }
 
                 Debug.Log(
-                    "UNRAVELER RESET TO: " +
-                    unravelerSpawn
+                    "UNRAVELER FINAL POSITION: " +
+                    TheUnraveler.transform.position
                 );
 
-                Debug.Log("UNRAVELER ACTIVATED");
+                Debug.Log(
+                    "UNRAVELER ACTIVATED"
+                );
             }
-
+            else
+            {
+                Debug.LogError(
+                    "GAME MANAGER: " +
+                    "THE UNRAVELER REFERENCE IS NULL!"
+                );
+            }
         }
+
         // =========================
-         // OTHER SCENES
-         // =========================
+        // OTHER SCENES
+        // =========================
 
         else
         {
@@ -108,6 +155,16 @@ public class GameManager : MonoBehaviour
 
                 Debug.Log(
                     "UNRAVELER DISABLED - SCENE: " +
+                    scene.name
+                );
+            }
+
+            if (Player != null)
+            {
+                Player.SetActive(true);
+
+                Debug.Log(
+                    "PLAYER KEPT ACTIVE - SCENE: " +
                     scene.name
                 );
             }
