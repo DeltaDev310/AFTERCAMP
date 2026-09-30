@@ -12,6 +12,7 @@ public class EndManager : MonoBehaviour
 
     [Header("Player")]
     public Transform player;
+    public GameObject playerMovement;
 
     [Header("Fade")]
     public Image fadeImage;
@@ -32,6 +33,10 @@ public class EndManager : MonoBehaviour
 
     private void Start()
     {
+        // Disable player controls during the ending
+        if (playerMovement != null)
+            playerMovement.SetActive(false);
+
         StartCoroutine(EndingSequence());
     }
 
@@ -41,18 +46,15 @@ public class EndManager : MonoBehaviour
         // INITIAL SETUP
         // =========================
 
-        // Dialogue starts completely hidden
         if (dialogueBox != null)
             dialogueBox.SetActive(false);
 
         if (dialogueText != null)
             dialogueText.gameObject.SetActive(false);
 
-        // Credits hidden
         if (madeByText != null)
             madeByText.gameObject.SetActive(false);
 
-        // Fade starts transparent
         if (fadeImage != null)
         {
             Color color = fadeImage.color;
@@ -60,16 +62,14 @@ public class EndManager : MonoBehaviour
             fadeImage.color = color;
         }
 
-        // Disable player control
+        // Make sure PlayerMovement is disabled
         if (player != null)
         {
             PlayerMovement movement =
                 player.GetComponent<PlayerMovement>();
 
             if (movement != null)
-            {
                 movement.enabled = false;
-            }
         }
 
         // =========================
@@ -98,9 +98,7 @@ public class EndManager : MonoBehaviour
         }
 
         if (dialogueBox != null)
-        {
             dialogueBox.SetActive(true);
-        }
 
         // Keep walking while dialogue is visible
         timer = 0f;
@@ -188,12 +186,31 @@ public class EndManager : MonoBehaviour
         }
 
         // =========================
-        // WAIT
+        // WAIT FOR CREDITS
         // =========================
 
         yield return new WaitForSeconds(
             creditDuration
         );
+
+        // =========================
+        // ENABLE PLAYER MOVEMENT
+        // =========================
+
+        if (playerMovement != null)
+        {
+            playerMovement.SetActive(true);
+        }
+
+        // Also make sure the PlayerMovement component itself is enabled
+        if (player != null)
+        {
+            PlayerMovement movement =
+                player.GetComponent<PlayerMovement>();
+
+            if (movement != null)
+                movement.enabled = true;
+        }
 
         // =========================
         // MAIN MENU

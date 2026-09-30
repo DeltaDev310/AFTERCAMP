@@ -10,7 +10,7 @@ public class DoorPasscode : MonoBehaviour
 
     public TMP_InputField PasscodeInputField;
 
-    public Transform Player;
+    public Transform PlayerCamera;
     public Transform EntraceDoor;
     public Transform Canvas;
     public Transform TheUnraveler;
@@ -69,7 +69,7 @@ public class DoorPasscode : MonoBehaviour
         {
             Debug.Log("Correct Passcode!");
 
-            Player.gameObject.SetActive(false);
+            PlayerCamera.gameObject.SetActive(false);
             EntraceDoor.gameObject.SetActive(false);
             PasscodeInputField.gameObject.SetActive(false);
             Canvas.gameObject.SetActive(false);

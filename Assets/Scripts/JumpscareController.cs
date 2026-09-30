@@ -58,7 +58,7 @@ public class JumpscareController : MonoBehaviour
         ResetGame();
 
         // Go back to intro
-        SceneManager.LoadScene("Intro");
+        SceneManager.LoadScene("Menu");
     }
 
     private void ResetGame()

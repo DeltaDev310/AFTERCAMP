@@ -1,9 +1,12 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    public DoorPasscode DoorPasscode;
 
     [Header("Persistent Objects")]
     public GameObject Player;
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    
 
     private void OnEnable()
     {
@@ -168,6 +172,11 @@ public class GameManager : MonoBehaviour
                     scene.name
                 );
             }
+        }
+
+        if (SceneManager.GetActiveScene().name == "MainGame")
+        {
+            DoorPasscode.PlayerCamera.gameObject.SetActive(true);
         }
     }
 }
