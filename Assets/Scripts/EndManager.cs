@@ -216,7 +216,7 @@ public class EndManager : MonoBehaviour
         // MAIN MENU
         // =========================
 
-        SceneManager.LoadScene("Menu");
+        QuitGame();
     }
 
     private void WalkPlayer()
@@ -228,5 +228,13 @@ public class EndManager : MonoBehaviour
             Vector3.down *
             walkSpeed *
             Time.deltaTime;
+    }
+    private void QuitGame()
+    {
+    #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+    #else
+        Application.Quit();
+    #endif
     }
 }

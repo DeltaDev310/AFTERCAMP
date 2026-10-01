@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public DoorPasscode DoorPasscode;
+    public GameObject DoorEntrace;
+    public PlayerMovement PlayerMovement;
 
     [Header("Persistent Objects")]
     public GameObject Player;
@@ -145,6 +147,9 @@ public class GameManager : MonoBehaviour
                     "THE UNRAVELER REFERENCE IS NULL!"
                 );
             }
+            DoorPasscode.PlayerCamera.gameObject.SetActive(true);
+            DoorEntrace.SetActive(true);
+            PlayerMovement.enabled = true;
         }
 
         // =========================
@@ -172,11 +177,7 @@ public class GameManager : MonoBehaviour
                     scene.name
                 );
             }
-        }
-
-        if (SceneManager.GetActiveScene().name == "MainGame")
-        {
-            DoorPasscode.PlayerCamera.gameObject.SetActive(true);
+         PlayerMovement.enabled = false;
         }
     }
 }
