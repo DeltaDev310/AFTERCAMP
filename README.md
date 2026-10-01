@@ -90,7 +90,5 @@ Indie game developer learning game programming, currently focused on Unity and C
 
 AFTERCAMP is an independent project created for learning, experimentation, and eventually release.
 
-**More coming soon this week.**
-
-**in testing!!**
-
+**Released check the game on itch.io**
+https://deltadev310.itch.io/aftercamp
